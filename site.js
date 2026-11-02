@@ -7,6 +7,7 @@
     '@media(max-width:767px){.fb-block .animatable{opacity:1!important}' +
     '.lol-b,.cs,.of,.bl,.hw,.wt{text-align:center!important}' +
     '[class*="ql-align-desktop-right"]{text-align:left!important}' +
+    '.lol-ct{grid-column:1/-1!important}.lol-ct img{border-radius:0!important;object-position:50% 40%!important}' +
     '.fb-element-type-custom-code__content p,.k2-p,.p,.k2-d,.k2-c details div{max-width:none!important}' +
     '.r{grid-template-columns:1fr!important;gap:14px!important;margin-top:30px!important}' +
     '.r img{height:auto!important;aspect-ratio:4/3!important}' +
@@ -112,7 +113,19 @@
     });
   }
 
-  function go() { try { mk(); mw(); fix(); tel(); lk(); } catch (e) {} }
+  // ---------- contact page photo ----------
+  function ct() {
+    var im = document.querySelector('.fb-element--image img[src*="wedding-groomsmen-808b0a14"]');
+    if (!im || !/\/contact/.test(location.pathname)) return;
+    im.removeAttribute('srcset'); im.removeAttribute('sizes');
+    im.src = 'https://images-pw.pixieset.com/site/2MYbKj/A5jDwwq/home-engagement-dc3338b5-1000.jpg';
+    im.alt = 'Couple embracing by the sea';
+    im.style.objectPosition = '42% 50%';
+    var el = im.closest('.fb-element');
+    if (el) el.classList.add('lol-ct');
+  }
+
+  function go() { try { mk(); ct(); mw(); fix(); tel(); lk(); } catch (e) {} }
   if (document.readyState !== 'loading') go();
   document.addEventListener('DOMContentLoaded', go);
   window.addEventListener('load', go);
