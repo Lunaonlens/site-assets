@@ -169,7 +169,12 @@
       makesOffer: services.map(function (x) { return { '@type': 'Offer', itemOffered: { '@type': 'Service', name: x.name, url: x.url } }; })
     };
     var names = { '/commercial': 'Commercial photography and video', '/real-estate': 'Real estate photography and video', '/google-listings': 'Google Business Profile photography', '/weddings-engagements': 'Weddings and engagements', '/contact': 'Contact', '/privacy-policy': 'Privacy policy' };
-    var graph = [];
+    document.querySelectorAll('script[type="application/ld+json"]').forEach(function (x) {
+      if (/"@type"\s*:\s*"WebSite"/.test(x.textContent)) x.parentNode.removeChild(x);
+    });
+    var sn = document.querySelector('meta[property="og:site_name"]');
+    if (sn) sn.setAttribute('content', 'LunaOnLens');
+    var graph = [{ '@type': 'WebSite', '@id': O + '/#website', name: 'LunaOnLens', alternateName: 'Luna On Lens', url: O + '/', inLanguage: 'en-AU', publisher: { '@id': O + '/#business' } }];
     if (path === '/') graph.push(biz);
     else {
       graph.push({ '@type': 'BreadcrumbList', itemListElement: [
