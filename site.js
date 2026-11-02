@@ -130,6 +130,7 @@
     if (document.getElementById('lol-ld')) return;
     var O = 'https://www.lunaonlens.com';
     var path = location.pathname.replace(/^\/preview\/site\/[^\/]+/, '').replace(/\/$/, '') || '/';
+    if (path === '/home') path = '/';
     var area = [
       { '@type': 'City', name: 'Perth', containedInPlace: { '@type': 'State', name: 'Western Australia' } },
       { '@type': 'State', name: 'Western Australia' }
@@ -190,8 +191,16 @@
       var h = document.querySelector('.gl-hero .gl-h, .wd-hero .wd-h, .c .h, .h');
       if (h && !h.getAttribute('role')) { h.setAttribute('role', 'heading'); h.setAttribute('aria-level', '1'); }
     }
+    var alts = {
+      'form-pilates-group': 'Group at a Perth pilates studio, photographed for Form Society Pilates',
+      'realestate-living-stairs': 'Real estate photography of a bright Perth home living area with staircase',
+      'team-': 'Team photo for a Perth business, shot by LunaOnLens',
+      'hero-poster': 'LunaOnLens photo and video for Perth businesses'
+    };
     document.querySelectorAll('img:not([alt]), img[alt=""]').forEach(function (i) {
-      if (i.closest('.site-logo, .fb-element-type-logo')) { i.alt = 'LunaOnLens logo'; }
+      if (i.closest('.site-logo, .fb-element-type-logo')) { i.alt = 'LunaOnLens logo'; return; }
+      var src = i.currentSrc || i.src || '';
+      for (var k in alts) { if (src.indexOf(k) > -1) { i.alt = alts[k]; break; } }
     });
   }
 
