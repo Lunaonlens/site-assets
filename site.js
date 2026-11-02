@@ -125,7 +125,77 @@
     if (el) el.classList.add('lol-ct');
   }
 
-  function go() { try { mk(); ct(); mw(); fix(); tel(); lk(); } catch (e) {} }
+  // ---------- SEO: structured data, heading and alt text (no visual change) ----------
+  function seo() {
+    if (document.getElementById('lol-ld')) return;
+    var O = 'https://www.lunaonlens.com';
+    var path = location.pathname.replace(/^\/preview\/site\/[^\/]+/, '').replace(/\/$/, '') || '/';
+    var area = [
+      { '@type': 'City', name: 'Perth', containedInPlace: { '@type': 'State', name: 'Western Australia' } },
+      { '@type': 'State', name: 'Western Australia' }
+    ];
+    var svc = function (n, u, d) {
+      return { '@type': 'Service', name: n, url: O + u, description: d, provider: { '@id': O + '/#business' }, areaServed: area };
+    };
+    var services = [
+      svc('Commercial photography and video', '/commercial/', 'Reels, social ads, brand photography, corporate events and drone for Perth businesses.'),
+      svc('Real estate photography and video', '/real-estate/', 'Property photography, walkthrough video and drone for Perth agents and sellers.'),
+      svc('Google Business Profile photography', '/google-listings/', 'Shopfront, interior and team photos for Perth businesses, sized for Google Business Profile.'),
+      svc('Wedding and engagement photography and film', '/weddings-engagements/', 'Wedding photography and film, engagement sessions and portraits in Perth and Western Australia.')
+    ];
+    var biz = {
+      '@type': ['LocalBusiness', 'ProfessionalService'],
+      '@id': O + '/#business',
+      name: 'LunaOnLens',
+      alternateName: 'Luna On Lens',
+      description: 'Perth photographer and videographer for businesses, real estate agents, weddings and engagements.',
+      url: O + '/',
+      logo: 'https://images-pw.pixieset.com/profile/7053501/2fc9d8657588db96b6545ec910863faf2fe81499782b89b9b4d97998c5abbda9.png',
+      image: 'https://images-pw.pixieset.com/site/2MYbKj/ZmAa88D/hero-poster-7df67ea5-1000.jpg',
+      telephone: '+61405939676',
+      email: 'admin@lunaonlens.com',
+      address: { '@type': 'PostalAddress', addressLocality: 'Perth', addressRegion: 'WA', addressCountry: 'AU' },
+      areaServed: area,
+      founder: { '@type': 'Person', name: 'Declan Aylmore' },
+      identifier: { '@type': 'PropertyValue', propertyID: 'ABN', value: '86 473 389 672' },
+      knowsAbout: ['Commercial photography', 'Video production', 'Real estate photography', 'Wedding photography', 'Engagement photography', 'Google Business Profile photography', 'Drone photography'],
+      sameAs: [
+        'https://www.instagram.com/lunaonlens/',
+        'https://www.facebook.com/p/Luna-On-Lens-61576800668374/',
+        'https://www.linkedin.com/company/143630949/',
+        'https://www.youtube.com/@LunaOnLens'
+      ],
+      makesOffer: services.map(function (x) { return { '@type': 'Offer', itemOffered: { '@type': 'Service', name: x.name, url: x.url } }; })
+    };
+    var names = { '/commercial': 'Commercial photography and video', '/real-estate': 'Real estate photography and video', '/google-listings': 'Google Business Profile photography', '/weddings-engagements': 'Weddings and engagements', '/contact': 'Contact', '/privacy-policy': 'Privacy policy' };
+    var graph = [];
+    if (path === '/') graph.push(biz);
+    else {
+      graph.push({ '@type': 'BreadcrumbList', itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: O + '/' },
+        { '@type': 'ListItem', position: 2, name: names[path] || document.title, item: O + path + '/' }
+      ] });
+      var m = { '/commercial': 0, '/real-estate': 1, '/google-listings': 2, '/weddings-engagements': 3 };
+      if (m[path] !== undefined) graph.push(services[m[path]]);
+      if (path === '/contact') graph.push({ '@type': 'ContactPage', url: O + '/contact/', about: { '@id': O + '/#business' } });
+    }
+    var sc = document.createElement('script');
+    sc.type = 'application/ld+json'; sc.id = 'lol-ld';
+    sc.textContent = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph });
+    document.head.appendChild(sc);
+  }
+
+  function hd() {
+    if (!document.querySelector('h1')) {
+      var h = document.querySelector('.gl-hero .gl-h, .wd-hero .wd-h, .c .h, .h');
+      if (h && !h.getAttribute('role')) { h.setAttribute('role', 'heading'); h.setAttribute('aria-level', '1'); }
+    }
+    document.querySelectorAll('img:not([alt]), img[alt=""]').forEach(function (i) {
+      if (i.closest('.site-logo, .fb-element-type-logo')) { i.alt = 'LunaOnLens logo'; }
+    });
+  }
+
+  function go() { try { seo(); hd(); mk(); ct(); mw(); fix(); tel(); lk(); } catch (e) {} }
   if (document.readyState !== 'loading') go();
   document.addEventListener('DOMContentLoaded', go);
   window.addEventListener('load', go);
