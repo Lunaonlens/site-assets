@@ -6,6 +6,7 @@
   var css =
     '@media(max-width:767px){.fb-block .animatable{opacity:1!important}' +
     '.lol-b,.cs,.of,.bl,.hw,.wt{text-align:center!important}' +
+    '[class*="ql-align-desktop-right"]{text-align:left!important}' +
     '.fb-element-type-custom-code__content p,.k2-p,.p,.k2-d,.k2-c details div{max-width:none!important}' +
     '.r{grid-template-columns:1fr!important;gap:14px!important;margin-top:30px!important}' +
     '.r img{height:auto!important;aspect-ratio:4/3!important}' +
